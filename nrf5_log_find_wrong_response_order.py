@@ -33,11 +33,12 @@ def finding_inequality(s):
 
 if __name__ == '__main__':
     if len(sys.argv) < 2:
-        print('Error: input file missed!')
+        print('nrf5_log_find_wrong_response_order.py [input_file]\n' +
+              'Error: arguments missed!')
         exit()
 
-    file_name = sys.argv[1]
-    list_of_responses = finding_response(file_name)
+    input_file = sys.argv[1]
+    list_of_responses = finding_response(input_file)
     errors = finding_inequality(list_of_responses)
     error_rate = errors*100//len(list_of_responses)
     print('total: ' + str(len(list_of_responses)) +

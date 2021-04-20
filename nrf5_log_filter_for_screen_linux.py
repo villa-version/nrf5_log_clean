@@ -1,8 +1,10 @@
-def read_and_clean_Lines():
-    cleanFileList = []
-    with open('screen_acm0.log', 'r') as f:
-        for _ in range(0, 491720):
-            line = f.readline()
+import sys
+
+
+def read_and_clean_lines(file_name):
+    clean_file_list = []
+    with open(file_name, 'r') as f:
+        for line in f:
             line = line[:-1]
             if line:
                 line = line.replace('\x1b[1;32musb_cli:~$ \x1b[1;37m\x1b[11D\x1b[J\x1b[0m', '')
@@ -15,16 +17,24 @@ def read_and_clean_Lines():
                 line = line.replace('\x1b[1;32musb_cli:~$ \x1b[1;37mstatus', '')
                 line = line.replace('\x1b[0m', '')
 
-                cleanFileList.append(line)
+                clean_file_list.append(line)
 
-    return cleanFileList
-
-
-def write_to_file(cleanFileList):
-    with open('screen_acm1.log', 'w') as f:
-        for i in range(0, len(cleanFileList)):
-            f.write(str(cleanFileList[i]) + '\n')
+    return clean_file_list
 
 
-cleanFileList = read_and_clean_Lines()
-write_to_file(cleanFileList)
+def write_to_file(s, file_name):
+    with open(file_name, 'w') as f:
+        for i in range(0, len(s)):
+            f.write(str(s[i]) + '\n')
+
+
+if __name__ == '__main__':
+    if len(sys.argv) < 3:
+        print('nrf5_log_filter_for_screen_linux.py [input_file] [output_file]\n' +
+              'Error: arguments missed!')
+        exit()
+
+    input_file = sys.argv[1]
+    output_file = sys.argv[2]
+    filtered_list = read_and_clean_lines(input_file)
+    write_to_file(filtered_list, output_file)
